@@ -9,6 +9,7 @@ com\gvn\brings\util\GenerateRefCode.class
 com\gvn\brings\model\BrngUsrLogin.class
 com\gvn\brings\model\BrngUsrAddress.class
 com\gvn\brings\dao\OrderDao.class
+com\gvn\brings\model\BrngLkpPayuDetails.class
 com\gvn\brings\model\BrngOrder.class
 com\gvn\brings\util\MailUtility$1.class
 com\gvn\brings\util\PushHelper.class

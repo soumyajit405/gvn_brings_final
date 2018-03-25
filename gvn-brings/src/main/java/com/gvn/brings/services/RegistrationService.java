@@ -99,6 +99,9 @@ public class RegistrationService extends AbstractBaseService{
 		return registrationDao.uploadImage(image,email);
 	}
 	
+	public  HashMap<String,String>  getPayuDetails() throws ClassNotFoundException, SQLException, FileNotFoundException{
+		return registrationDao.getPayuDetails();
+	}
 	
 	
 	

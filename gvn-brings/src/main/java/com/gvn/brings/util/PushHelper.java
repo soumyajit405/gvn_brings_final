@@ -168,7 +168,7 @@ return "success";
 			   System.out.println("strJsonBody:\n" + strJsonBody);
 
 			   byte[] sendBytes = strJsonBody.getBytes("UTF-8");
-			   con.setFixedLengthStreamingMode(sendBytes.length);
+			 //  con.setFixedLengthStreamingMode(sendBytes.length);
 
 			   OutputStream outputStream = con.getOutputStream();
 			   outputStream.write(sendBytes);
@@ -265,12 +265,15 @@ return "success";
 
 	public static void main(String args[])
 	{
-		PushHelper ph=new PushHelper();
+		
+		MailUtility mu=new MailUtility();
+		mu.sendEmail("soumyajit405@gmail.com", "Test");
+		/*PushHelper ph=new PushHelper();
 		try {
 			ph.pushTest("94ee4fd0-e08d-4bed-bc30-c974c31113e7", "welcome");
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 }

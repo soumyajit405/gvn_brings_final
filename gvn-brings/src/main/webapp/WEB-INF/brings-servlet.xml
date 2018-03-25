@@ -31,9 +31,9 @@
 	<bean id="dataSource"
 		class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/brings" />
-		<property name="username" value="root" />
-		<property name="password" value="MYSQL@12345" />
+		<property name="url" value="jdbc:mysql://localhost:3306/brings_admin" />
+		<property name="username" value="admin" />
+		<property name="password" value="MYSQL12345" />
 		<property name="maxActive" value="-1" />
 		<property name="maxIdle" value="-1" />
 		<property name="maxWait" value="-1" />

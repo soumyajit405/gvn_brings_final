@@ -158,9 +158,17 @@ BrngUsrLogin brngusrlogin=manager.createQuery("Select a From BrngUsrLogin a wher
 		
 		int userLoginId=brngusrlogin.getId();
 		
+		BrngLkpIsRetry brnglkpsiretry = manager.createQuery("Select a From BrngLkpIsRetry a where a.isRetry='Y'",BrngLkpIsRetry.class).
+				getSingleResult();
+		
 		System.out.println(userId);
+		
+		BrngLkpIsAccepted brnglkpisacceted = manager.createQuery("Select a From BrngLkpIsAccepted a where a.isAccepted='Y'",BrngLkpIsAccepted.class).
+				getSingleResult();
+		
 		System.out.println("Select a From BrngOrder a where a.brngUsrLogin.id="+userLoginId+" and order_time between date('"+inputDetails.get("startDate")+ "') and DATE_ADD(date('"+inputDetails.get("endDate")+ "'),INTERVAL 1 DAY)");
-		List<BrngOrder> brngOrders = manager.createQuery("Select a From BrngOrder a where a.brngUsrLogin.id="+userLoginId+" and a.orderTime between date('"+inputDetails.get("startDate")+ "') and date('"+inputDetails.get("endDate")+ "')+1 ",BrngOrder.class).
+		//List<BrngOrder> brngOrders = manager.createQuery("Select a From BrngOrder a where a.brngUsrLogin.id="+userLoginId+" and a.orderTime between date('"+inputDetails.get("startDate")+ "') and date('"+inputDetails.get("endDate")+ "')+1 ",BrngOrder.class).
+		List<BrngOrder> brngOrders = manager.createQuery("Select a From BrngOrder a where a.brngUsrLogin.id="+userLoginId+" and (a.brnglkpisretry.id="+brnglkpsiretry.getId()+ " or a.isAccepted.id="+brnglkpisacceted.getId()+") and a.orderTime between date('"+inputDetails.get("startDate")+ "') and date('"+inputDetails.get("endDate")+ "')+1  order by a.orderTime desc",BrngOrder.class).
 				
 				getResultList();
 	
@@ -196,8 +204,11 @@ BrngUsrLogin brngusrlogin=manager.createQuery("Select a From BrngUsrLogin a wher
 		int userLoginId=brngusrlogin.getId();
 		BrngLkpOrderDelStatus brnglkporderdelstatus = manager.createQuery("Select a From BrngLkpOrderDelStatus a where a.delStatus='Y'",BrngLkpOrderDelStatus.class).
 				getSingleResult();
+		
+		
 		int completeId=brnglkporderdelstatus.getId();
-		Query query= manager.createQuery("Select a From BrngOrder a , BrngOrderDelivery b where a.id=b.brngOrder.id and b.brngUsrLogin.id="+userLoginId+ " and a.orderTime between date('"+inputDetails.get("startDate")+ "') and date('"+inputDetails.get("endDate")+"')");
+		//Query query= manager.createQuery("Select a From BrngOrder a , BrngOrderDelivery b where a.id=b.brngOrder.id and b.brngUsrLogin.id="+userLoginId+ " and a.orderTime between date('"+inputDetails.get("startDate")+ "') and date('"+inputDetails.get("endDate")+"')");
+		Query query= manager.createQuery("Select a From BrngOrder a , BrngOrderDelivery b where a.id=b.brngOrder.id and b.brngUsrLogin.id="+userLoginId+ " and a.orderTime between date('"+inputDetails.get("startDate")+ "') and date('"+inputDetails.get("endDate")+"') +1 order by a.orderTime desc");
 		
 		List<BrngOrder> orders = (List<BrngOrder>) query.getResultList();
 		
@@ -284,7 +295,7 @@ BrngUsrLogin brngusrlogin=manager.createQuery("Select a From BrngUsrLogin a wher
 				System.out.println("nonaccept "+nonacceptanceId);
 				//Query query= manager.createQuery("Select a From BrngOrder a , BrngOrderDelivery b where a.id=b.brngOrder.id and b.brngLkpOrderDelStatus.id="+completeId+" and a.brngUsrLogin.id="+userLoginId+" and a.isAccepted.id="+acceptanceId+" and a.brnglkpiscancelled.id="+cancellationId + "union Select a From BrngOrder a , BrngOrderDelivery b where a.id=b.brngOrder.id and b.brngLkpOrderDelStatus.id="+completeId+" and a.brngUsrLogin.id="+userLoginId+" and a.brnglkpisretry.id="+brnglkpsiretry.getId()+" and a.brnglkpiscancelled.id="+cancellationId);
 				//Query query= manager.createQuery("Select distinct a From BrngOrder a , BrngOrderDelivery b where a.id=b.brngOrder.id and b.brngLkpOrderDelStatus.id="+completeId+" and a.brngUsrLogin.id="+userLoginId+" and a.isAccepted.id="+acceptanceId+" and a.brnglkpiscancelled.id="+cancellationId +"  or (a.brngUsrLogin.id="+userLoginId+"  and a.brnglkpisretry.id="+brnglkpsiretry.getId()+")");
-				Query query= manager.createQuery("Select distinct a From BrngOrder a , BrngOrderDelivery b where a.id=b.brngOrder.id and b.brngLkpOrderDelStatus.id="+completeId+" and a.brngUsrLogin.id="+userLoginId+" and a.isAccepted.id="+acceptanceId+" and a.brnglkpiscancelled.id="+cancellationId  );
+				Query query= manager.createQuery("Select distinct a From BrngOrder a , BrngOrderDelivery b where a.id=b.brngOrder.id and b.brngLkpOrderDelStatus.id="+completeId+" and a.brngUsrLogin.id="+userLoginId+" and a.isAccepted.id="+acceptanceId+" and a.brnglkpiscancelled.id="+cancellationId+" order by a.orderTime desc"  );
 				 
 						System.out.println("query ");
 				List<BrngOrder> orders = (List<BrngOrder>) query.getResultList();
@@ -353,7 +364,7 @@ BrngUsrLogin brngusrlogin=manager.createQuery("Select a From BrngUsrLogin a wher
 						getSingleResult();
 				int completeId=brnglkporderdelstatus.getId();
 				
-				Query query= manager.createQuery("Select a From BrngOrder a , BrngOrderDelivery b where a.id=b.brngOrder.id and b.brngLkpOrderDelStatus.id="+completeId+" and a.brngUsrLogin.id="+userLoginId);
+				Query query= manager.createQuery("Select a From BrngOrder a , BrngOrderDelivery b where a.id=b.brngOrder.id and b.brngLkpOrderDelStatus.id="+completeId+" and a.brngUsrLogin.id="+userLoginId+" order by a.orderTime desc");
 						
 				List<BrngOrder> orders = (List<BrngOrder>) query.getResultList();
 				
@@ -395,7 +406,7 @@ BrngUsrLogin brngusrlogin=manager.createQuery("Select a From BrngUsrLogin a wher
 				int completeId=brnglkporderdelstatus.getId();
 				
 				//System.out.println("query -Select a From BrngOrder a where a.brngUsrLogin.id="+userLoginId+" and orderTime >= "+inputDetails.get("startDate")+ " and orderTime <="+inputDetails.get("endDate"));
-				Query query= manager.createQuery("Select a From BrngOrder a , BrngOrderDelivery b where a.id=b.brngOrder.id and b.brngLkpOrderDelStatus.id="+completeId+" and b.brngUsrLogin.id="+userLoginId);
+				Query query= manager.createQuery("Select a From BrngOrder a , BrngOrderDelivery b where a.id=b.brngOrder.id and b.brngLkpOrderDelStatus.id="+completeId+" and b.brngUsrLogin.id="+userLoginId+" order by a.orderTime desc");
 				
 				List<BrngOrder> orders = (List<BrngOrder>) query.getResultList();
 				
@@ -457,7 +468,7 @@ public List<OrderDto> getCurrentOrdersService(Hashtable<String,String> inputDeta
 				BrngLkpIsCancelled brnglkpiscancelled = manager.createQuery("Select a From BrngLkpIsCancelled a where a.isCancelled='N'",BrngLkpIsCancelled.class).
 						getSingleResult();
 				int cancellationId=brnglkpiscancelled.getId();
-				List<BrngOrder> brngOrders = manager.createQuery("Select a From BrngOrder a where  a.id in "+orderList +" and a.brnglkpiscancelled.id="+cancellationId,BrngOrder.class).
+				List<BrngOrder> brngOrders = manager.createQuery("Select a From BrngOrder a where  a.id in "+orderList +" and a.brnglkpiscancelled.id="+cancellationId+" order by a.orderTime desc ",BrngOrder.class).
 						getResultList();
 			
 				OrderDto orderDto = null;

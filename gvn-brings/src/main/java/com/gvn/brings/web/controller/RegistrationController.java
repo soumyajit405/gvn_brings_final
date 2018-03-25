@@ -170,6 +170,14 @@ public class RegistrationController extends AbstractBaseController{
 		
 		return registrationService.uploadImage(image,email); 
 	}
+	
+	@RequestMapping(value = REST+"getPayuDetails",  method = RequestMethod.GET,headers="Accept=application/json")
+	public  HashMap<String,String>   getPayuDetails() throws ClassNotFoundException, SQLException,IOException{
+		// String saveDirectory = "D:\\Softwares\\apache-tomcat-8.5.9-windows-x64\\apache-tomcat-8.5.9\\webapps\\WebSockets\\32\\aadhar";
+		//System.out.println("description: " + request.getParameter("email"));
+		
+		return registrationService.getPayuDetails(); 
+	}
 		// return null;
 	
 	

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gvn.brings.dto.TestDto;
 import com.gvn.brings.model.BrngLkpFilePath;
+import com.gvn.brings.model.BrngLkpPayuDetails;
 import com.gvn.brings.model.BrngOrder;
 import com.gvn.brings.model.BrngOrderDelivery;
 import com.gvn.brings.model.BrngTest;
@@ -53,6 +54,8 @@ public class CommonDBHelper extends AbstractBaseDao {
 		BrngLkpFilePath brnglkpfilepath=getManager().createQuery("Select a From BrngLkpFilePath",BrngLkpFilePath.class).getSingleResult();
 		return brnglkpfilepath.getFilePath();
 	}
+	
+	
 	
 
 

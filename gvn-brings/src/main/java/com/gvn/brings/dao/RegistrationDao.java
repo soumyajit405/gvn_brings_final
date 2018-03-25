@@ -39,6 +39,7 @@ import com.gvn.brings.model.BrngLkpIsPaid;
 import com.gvn.brings.model.BrngLkpOrderDelStatus;
 import com.gvn.brings.model.BrngLkpOtpValidated;
 import com.gvn.brings.model.BrngLkpPayType;
+import com.gvn.brings.model.BrngLkpPayuDetails;
 import com.gvn.brings.model.BrngLkpServicemanValidated;
 import com.gvn.brings.model.BrngLkpUsrRegStatus;
 import com.gvn.brings.model.BrngLkpUsrRegType;
@@ -880,11 +881,11 @@ public HashMap<String,String> resendOtp(String email){
 				if(count>0)
 				{ 
 					query = manager
-				.createQuery("UPDATE BrngUsrOtp a SET a.effectiveDate = :generatedTime,a.otpCode=:otpCode where a.brngUsrReg= :reg "
-				+ "WHERE a.brngUsrReg.id= :id");
+				.createQuery("UPDATE BrngUsrOtp a SET a.effectiveDate = :generatedTime,a.otpCode=:otpCode where "
+				+ "a.brngUsrReg.id= :id");
 				query.setParameter("generatedTime", registeredTime);
 				query.setParameter("otpCode",otputil.sendOTP(brngusrregattr.getPhoneNumber()));
-				query.setParameter("reg",brngusrreg);
+				query.setParameter("id",userId);
 				
 				
 					query.executeUpdate();
@@ -901,12 +902,21 @@ public HashMap<String,String> resendOtp(String email){
 					
 				}
 		
+				message=UserMessages.getUserMessagesNew("ORS");
+				response.put("message", message);
+				response.put("response", "1");
 				
 		
 		}
 		
 	
-	
+	catch(NoResultException nre)
+	{
+		message=UserMessages.getUserMessagesNew("NR");
+		response.put("message", message);
+		response.put("response", "3");	
+		
+	}
 	
 	catch(Exception e)
 	{
@@ -916,10 +926,7 @@ public HashMap<String,String> resendOtp(String email){
 		response.put("message", message);
 		response.put("response", "-1");
 	}
-	message=UserMessages.getUserMessagesNew("ORS");
-	response.put("message", message);
-	response.put("response", "1");
-	return response;
+	return response;	
 	
 }
 
@@ -1417,5 +1424,37 @@ public float getTotalDistance(String email)
 		//return -1;
 	}
 	return totalDistance;
+}
+
+public HashMap<String,String> getPayuDetails() throws FileNotFoundException{
+	
+	HashMap<String,String> response =new HashMap<>();
+	String message="";
+	 
+	
+      try {
+    	
+	List<BrngLkpPayuDetails> brnglkppayudetails=manager.createQuery("Select a From BrngLkpPayuDetails a order by a.id",BrngLkpPayuDetails.class).getResultList();
+	
+	
+	BufferedOutputStream outputStream =null;
+	response.put("URL",brnglkppayudetails.get(0).getPayuValue());
+	response.put("KEY",brnglkppayudetails.get(1).getPayuValue());
+	
+	
+	
+	}
+      
+	
+	catch(Exception e)
+	{
+		e.printStackTrace();
+		//transaction.rollback();
+		message=UserMessages.getUserMessages(-1);
+		response.put("message", message);
+		response.put("response", "-1");
+	}
+     
+	return response;
 }
 }

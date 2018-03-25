@@ -31,9 +31,15 @@ import org.json.JSONObject;
 		//Sending Email
 		public String sendEmail(String useremail,String genPassword){
 			  String status="";
-			  String host="smtp.gmail.com";  
-			  final String user="myteamdiscussion@gmail.com";//change accordingly  
-			  final String password="papun12345";//change accordingly  
+			 // String host="smtp.gmail.com";  
+			  String host="mail.brings.co.in";  
+			//  final String user="brings.gvn@gmail.com";//change accordingly
+			 // final String user="myteamdiscussion@gmail.com";//change accordingly  
+			  final String user="support@brings.co.in";
+			  
+			 //final String password="papun12345";//change accordingly  
+			  final String password="Papun@12345";
+			  //final String password="gvn123456";
 			  System.out.println("email entered  "+useremail);  
 			  String to=useremail;//change accordingly  
 			  //SmtpClient 
@@ -58,8 +64,8 @@ import org.json.JSONObject;
 			     MimeMessage message = new MimeMessage(session);  
 			     message.setFrom(new InternetAddress(user));  
 			     message.addRecipient(Message.RecipientType.TO,new InternetAddress(to));  
-			     message.setSubject("Forgot Password");  
-			     message.setText("new password generated successfully  : " + genPassword);  
+			     message.setSubject("New Password For Brings");  
+			     message.setText("New password generated successfully  : " + genPassword);  
 			       
 			    //send the message  
 			     Transport.send(message);  
@@ -163,6 +169,12 @@ import org.json.JSONObject;
 		    return sb.toString();
 		  }
 
+		
+		public static void main(String[] args)
+		{
+			MailUtility mu=new MailUtility();
+			mu.sendEmail("soumyajit405@gmail.com", "Test");
+		}
 
 }  
  
